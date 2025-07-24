@@ -35,7 +35,7 @@ resource "azurerm_automation_schedule" "daily" {
   automation_account_name = azurerm_automation_account.main.name
   frequency               = "Day"
   interval                = 1
-  start_time              = var.start_time_utc
+  start_time              = var.start_time_utc == null ? timeadd(timestamp(), "1h") : var.start_time_utc
   timezone                = "UTC"
 }
 

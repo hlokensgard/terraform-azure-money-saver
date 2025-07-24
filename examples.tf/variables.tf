@@ -13,13 +13,9 @@ variable "automation_account_name" {
   default     = "moneySaverAutomation"
 }
 
-variable "schedule_name" {
-  description = "Name of the Automation Schedule."
-  default     = "dailyRunbookSchedule"
-}
-
 variable "start_time_utc" {
   description = "Start time for the schedule in UTC (YYYY-MM-DDTHH:MM:SSZ)."
+  default     = null
 }
 
 

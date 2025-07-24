@@ -79,11 +79,11 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_automation_account_subscription_id"></a> [automation\_account\_subscription\_id](#input\_automation\_account\_subscription\_id) | Azure Subscription ID. | `string` | n/a | yes |
-| <a name="input_start_time_utc"></a> [start\_time\_utc](#input\_start\_time\_utc) | Start time for the schedule in UTC (YYYY-MM-DDTHH:MM:SSZ). | `any` | n/a | yes |
 | <a name="input_automation_account_name"></a> [automation\_account\_name](#input\_automation\_account\_name) | Name of the Azure Automation Account. | `string` | `"moneySaverAutomation"` | no |
 | <a name="input_location"></a> [location](#input\_location) | Azure region for resources. | `string` | `"westeurope"` | no |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | Name of the Azure Resource Group. | `string` | `"money-saver-rg"` | no |
 | <a name="input_sandbox_subscriptions"></a> [sandbox\_subscriptions](#input\_sandbox\_subscriptions) | List of Azure Subscription IDs for sandbox environments. | `list(string)` | `[]` | no |
+| <a name="input_start_time_utc"></a> [start\_time\_utc](#input\_start\_time\_utc) | Start time for the schedule in UTC (YYYY-MM-DDTHH:MM:SSZ). | `any` | `null` | no |
 
 ## Outputs
 

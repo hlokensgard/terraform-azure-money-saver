@@ -15,6 +15,7 @@ variable "automation_account_name" {
 
 variable "start_time_utc" {
   description = "Start time for the schedule in UTC (YYYY-MM-DDTHH:MM:SSZ)."
+  default     = null
 }
 
 
