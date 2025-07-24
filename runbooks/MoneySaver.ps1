@@ -22,12 +22,6 @@ function Use-RequiredAzModules {
 }
 
 function Connect-AzAutomation {
-<#     param (
-        [Parameter(Mandatory)]
-        [string]$AutomationAccountSubscriptionId
-    ) #>
-
-    # Ensures you do not inherit an AzContext in your runbook
     Disable-AzContextAutosave –Scope Process
     while(!($connectionResult) -and ($logonAttempt -le 10))
     {
@@ -37,27 +31,6 @@ function Connect-AzAutomation {
         $connectionResult = Connect-AzAccount -Identity
         Start-Sleep -Seconds 30
     }
-
-<#     $connectionName = "AzureRunAsConnection"
-    Write-Output "Retrieving Azure Automation connection: $connectionName"
-    try {
-        $servicePrincipalConnection = Get-AutomationConnection -Name $connectionName
-        if ($null -eq $servicePrincipalConnection) {
-            Write-Output -ForegroundColor Red "Could not retrieve the connection: $connectionName"
-            return
-        }
-
-        $tenantId = $servicePrincipalConnection.TenantId
-        $appId = $servicePrincipalConnection.ApplicationId
-        $certificateThumbprint = $servicePrincipalConnection.CertificateThumbprint
-
-        Write-Output "Authenticating to Azure using Service Principal for Subscription ID: $AutomationAccountSubscriptionId"
-        Connect-AzAccount -ServicePrincipal -TenantId $tenantId -ApplicationId $appId -CertificateThumbprint $certificateThumbprint -SubscriptionId $AutomationAccountSubscriptionId
-        Write-Output "Authentication successful."
-    }
-    catch {
-        Write-Output -ForegroundColor Red "Error during Azure Automation authentication: $_"
-    } #>
 }
 
 function Stop-Firewalls {
@@ -118,7 +91,7 @@ function Set-ApplicationGateways {
         [string]$Operation
     )
 
-    Write-Output "Starting Application Gateway management for gateways matching: '$GatewayName' with operation: '$Operation'"
+    Write-Output "Starting Application Gateway management with operation: '$Operation'"
     try {
         Get-AzSubscription -TenantId $TenantId |
         ForEach-Object {
@@ -129,7 +102,6 @@ function Set-ApplicationGateways {
 
                 Get-AzApplicationGateway |
                 Where-Object {-not ($_.Tags.Keys | Where-Object{ $_ -eq "keep"})} |
-                Where-Object { $_.Name -like $GatewayName } |
                 ForEach-Object {
                     $gateway = $_
                     $name = $gateway.Name
@@ -156,10 +128,6 @@ function Set-ApplicationGateways {
                     catch {
                         Write-Output -ForegroundColor Red "Error managing gateway $($name): $_"
                     }
-                        
-                }
-                else {
-                    Write-Output "No application gateways found matching '$GatewayName' in subscription $($sub.Name)."
                 }
             }
             catch {
@@ -336,9 +304,4 @@ function Invoke-MoneySaver {
 $sandboxSubscriptions = (Get-AutomationVariable -Name 'sandboxsubscriptions' -ErrorAction SilentlyContinue)
 $sandboxSubscriptions = $sandboxSubscriptions -split ","
 
-Invoke-MoneySaver |
--RunFirewalls $stopfirewalls |
--RunApplicationGateways $stopapplicationgateways |
--RunVMsAndVMSS $stopvmsandvmss |
--RunSandboxCleanup $sandboxcleanup |
--RunSandboxCleanup $sandboxSubscriptions
+Invoke-MoneySaver -RunFirewalls $stopfirewalls -RunApplicationGateways $stopapplicationgateways -RunVMsAndVMSS $stopvmsandvmss -RunSandboxCleanup $sandboxcleanup -SandboxSubscriptions $sandboxSubscriptions

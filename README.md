@@ -1,20 +1,63 @@
 # terraform-azure-money-saver
-This module deploys an Automation Account with preconfigured runbooks to help minimize costs in your test environments by automatically managing resource usage.
 
-## Manual Action Required
+This Terraform module helps you save costs in Azure test environments by automatically managing resource usage. It deploys an Azure Automation Account with preconfigured runbooks and schedules to stop or deallocate resources (such as VMs) at specified times, reducing unnecessary spend.
 
-Grant the system-assigned managed identity of the Automation Account Contributor or similar permissions on each subscription where you want changes to be made.
+## Features
+
+- Creates an Azure Automation Account and Resource Group.
+- Deploys runbooks for cost-saving automation.
+- Schedules runbooks to run daily at your chosen time.
+- Supports multiple sandbox subscriptions.
+
+## Usage
+
+```hcl
+module "money_saver" {
+    source  = "github.com/hlokensgard/terraform-azure-money-saver"
+    
+    automation_account_subscription_id = "<your-subscription-id>"
+    start_time_utc                    = "2024-06-01T22:00:00Z"
+    sandbox_subscriptions             = ["<sandbox-sub-id-1>", "<sandbox-sub-id-2>"]
+
+    # Optional overrides
+    automation_account_name           = "customAutomationAccount"
+    location                         = "westeurope"
+    resource_group_name               = "custom-rg"
+}
+```
+
+## Manual Steps Required
+
+After deployment, you **must grant the system-assigned managed identity of the Automation Account** Contributor or similar permissions on each subscription where you want resources to be managed. This allows the runbooks to make changes (e.g., stop VMs) in those subscriptions.
+
+## Example Workflow
+
+1. Deploy the module with your desired settings.
+2. Grant the Automation Account's managed identity Contributor permissions on target subscriptions.
+3. The runbooks will execute daily, managing resources to minimize costs.
+
+## License
+
+MIT
+
+## Further Possibilities
+
+- Extend runbook functionality to support additional scenarios.
+- Add remediation steps for policy compliance, such as targeted deletion of unused resources.
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
-No requirements.
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~>1.0 |
+| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~>4.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | n/a |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | ~>4.0 |
 
 ## Modules
 
@@ -30,7 +73,6 @@ No modules.
 | [azurerm_automation_schedule.daily](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/automation_schedule) | resource |
 | [azurerm_automation_variable_string.variables](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/automation_variable_string) | resource |
 | [azurerm_resource_group.main](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) | resource |
-| [azurerm_role_assignment.automation_account_contributor](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) | resource |
 
 ## Inputs
 

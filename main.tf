@@ -55,9 +55,3 @@ resource "azurerm_automation_variable_string" "variables" {
   automation_account_name = azurerm_automation_account.main.name
   value                   = each.value
 }
-
-resource "azurerm_role_assignment" "automation_account_contributor" {
-  scope                = azurerm_automation_account.main.id
-  role_definition_name = "Contributor"
-  principal_id         = azurerm_automation_account.main.identity[0].principal_id
-}
