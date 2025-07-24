@@ -160,7 +160,8 @@ function Stop-NonTaggedVMsAndVMSS {
                     try {
                         $vms | ForEach-Object {
                             Write-Output "Stopping VM: $($_.Name) in resource group: $($_.ResourceGroupName)"
-                        } | Stop-AzVM -Force
+                            $_ | Stop-AzVM -Force
+                        }
                         Write-Output "All non-tagged VMs stopped."
                     }
                     catch {
@@ -177,7 +178,8 @@ function Stop-NonTaggedVMsAndVMSS {
                     try {
                         $vmss | ForEach-Object {
                             Write-Output "Stopping VMSS: $($_.Name) in resource group: $($_.ResourceGroupName)"
-                        } | Stop-AzVmss -Force
+                            $_ | Stop-AzVmss -Force
+                        }
                         Write-Output "All non-tagged VMSS stopped."
                     }
                     catch {

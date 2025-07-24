@@ -5,8 +5,8 @@ provider "azurerm" {
 }
 
 module "money_saver" {
-  source = "../"
-
+  source                             = "hlokensgard/money-saver/azure"
+  version                            = "1.0.0"
   resource_group_name                = var.resource_group_name
   location                           = var.location
   automation_account_name            = var.automation_account_name
