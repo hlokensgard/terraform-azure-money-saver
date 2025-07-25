@@ -7,18 +7,26 @@ locals {
     firewall = {
       name       = "dailyFirewallSchedule"
       parameters = { stopfirewalls = "true" }
+      frequency  = "Day"
+      interval   = 1
     }
     app_gateway = {
       name       = "dailyAppGatewaySchedule"
       parameters = { stopapplicationgateways = "true" }
+      frequency  = "Day"
+      interval   = 1
     }
     vm_vmss = {
       name       = "dailyVMVMSSchedule"
       parameters = { stopvmsandvmss = "true" }
+      frequency  = "Day"
+      interval   = 1
     }
     sandbox_cleanup = {
-      name       = "dailySandboxCleanupSchedule"
+      name       = "byweeklySandboxCleanupSchedule"
       parameters = { stopsandboxcleanup = "true" }
+      frequency  = "Week"
+      interval   = 2
     }
   }
 }
