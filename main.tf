@@ -29,6 +29,12 @@ resource "azurerm_automation_runbook" "runbooks" {
 
 
 resource "azurerm_automation_schedule" "daily" {
+  lifecycle {
+    ignore_changes = [
+      start_time,
+      timezone
+    ]
+  }
   for_each                = local.schedules
   name                    = each.value.name
   resource_group_name     = azurerm_resource_group.main.name
